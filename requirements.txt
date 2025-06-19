@@ -1,0 +1,11 @@
+# CUDA Python Libraries
+numpy>=1.20.0
+numba>=0.56.0
+cupy-cuda12x>=12.0.0  # For CUDA 12.x
+torch>=2.0.0
+pycuda>=2022.1
+tensorflow>=2.10.0
+
+# Optional: For better performance
+scipy>=1.8.0
+matplotlib>=3.5.0  # For plotting results 
