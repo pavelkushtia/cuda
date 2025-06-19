@@ -5,7 +5,7 @@
 
 # Compiler and flags
 NVCC = nvcc
-NVCC_FLAGS = -O2 -arch=sm_52
+NVCC_FLAGS = -O2 -arch=sm_75
 BUILD_DIR = build
 TARGET = $(BUILD_DIR)/hello_world
 DEVICE_INFO = $(BUILD_DIR)/device_info
