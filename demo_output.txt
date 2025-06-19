@@ -1,0 +1,69 @@
+Demo Output - CUDA Hello World Application
+============================================
+
+This is what the output would look like when running the CUDA Hello World application
+on a system with NVIDIA GPU and CUDA toolkit installed.
+
+$ make run
+
+Compiling CUDA Hello World application...
+nvcc -O2 -arch=sm_52 -o hello_world hello_world.cu
+Build completed successfully!
+Running CUDA Hello World application...
+./hello_world
+
+Hello World from CPU!
+Found 1 CUDA device(s)
+Using device: NVIDIA GeForce RTX 3080
+Compute capability: 8.6
+Number of multiprocessors: 68
+
+Launching kernel with 2 blocks, 4 threads per block...
+Hello World from GPU! Block: 0, Thread: 0
+Hello World from GPU! Block: 0, Thread: 1
+Hello World from GPU! Block: 0, Thread: 2
+Hello World from GPU! Block: 0, Thread: 3
+Hello World from GPU! Block: 1, Thread: 0
+Hello World from GPU! Block: 1, Thread: 1
+Hello World from GPU! Block: 1, Thread: 2
+Hello World from GPU! Block: 1, Thread: 3
+
+Kernel execution completed successfully!
+
+$ make device-info
+
+CUDA Device Information Utility
+===============================
+
+Found 1 CUDA device(s):
+
+=== Device 0: NVIDIA GeForce RTX 3080 ===
+Compute Capability: 8.6
+Global Memory: 10240 MB
+Shared Memory per Block: 48 KB
+Registers per Block: 65536
+Warp Size: 32
+Max Threads per Block: 1024
+Max Threads per Multiprocessor: 1536
+Max Blocks per Multiprocessor: 16
+Number of Multiprocessors: 68
+Max Grid Size: (2147483647, 65535, 65535)
+Max Block Size: (1024, 1024, 64)
+Memory Clock Rate: 1900 MHz
+Memory Bus Width: 320 bits
+ECC Enabled: No
+Unified Memory: Yes
+
+Current device: 0
+
+CUDA Runtime Version: 11.8.0
+
+$ make check-cuda
+
+Checking CUDA installation...
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2022 NVIDIA Corporation
+Built on Wed_Jul_20_16:32:28_PDT_2022
+Cuda compilation tools, release 11.8, V11.8.89
+Build cuda_11.8.r11.8/compiler.30626654_0
+CUDA installation found! 
