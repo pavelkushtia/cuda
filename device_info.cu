@@ -26,8 +26,23 @@ void printDeviceInfo(int deviceId) {
         return;
     }
     
+    // Calculate CUDA cores based on compute capability
+    int cudaCores = 0;
+    if (prop.major == 7) {
+        if (prop.minor == 5) {
+            cudaCores = prop.multiProcessorCount * 128; // Turing architecture
+        } else if (prop.minor == 0) {
+            cudaCores = prop.multiProcessorCount * 64;  // Volta architecture
+        }
+    } else if (prop.major == 8) {
+        cudaCores = prop.multiProcessorCount * 128; // Ampere architecture
+    } else if (prop.major == 9) {
+        cudaCores = prop.multiProcessorCount * 144; // Hopper architecture
+    }
+    
     printf("\n=== Device %d: %s ===\n", deviceId, prop.name);
     printf("Compute Capability: %d.%d\n", prop.major, prop.minor);
+    printf("CUDA Cores: %d\n", cudaCores);
     printf("Global Memory: %lu MB\n", prop.totalGlobalMem / (1024 * 1024));
     printf("Shared Memory per Block: %lu KB\n", prop.sharedMemPerBlock / 1024);
     printf("Registers per Block: %d\n", prop.regsPerBlock);
@@ -42,6 +57,8 @@ void printDeviceInfo(int deviceId) {
     printf("Memory Bus Width: %d bits\n", prop.memoryBusWidth);
     printf("ECC Enabled: %s\n", prop.ECCEnabled ? "Yes" : "No");
     printf("Unified Memory: %s\n", prop.unifiedAddressing ? "Yes" : "No");
+    printf("Concurrent Kernels: %s\n", prop.concurrentKernels ? "Yes" : "No");
+    printf("Compute Mode: %d\n", prop.computeMode);
 }
 
 int main() {
@@ -76,7 +93,7 @@ int main() {
         printf("\nCurrent device: %d\n", currentDevice);
     }
     
-    printf("\nCUDA Runtime Version: %s\n", CUDART_VERSION_STRING);
+    printf("\nCUDA Runtime Version: %d.%d\n", CUDART_VERSION/1000, (CUDART_VERSION%1000)/10);
     
     return 0;
 } 

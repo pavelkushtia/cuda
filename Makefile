@@ -6,27 +6,45 @@
 # Compiler and flags
 NVCC = nvcc
 NVCC_FLAGS = -O2 -arch=sm_52
-TARGET = hello_world
+BUILD_DIR = build
+TARGET = $(BUILD_DIR)/hello_world
+DEVICE_INFO = $(BUILD_DIR)/device_info
 SOURCE = hello_world.cu
+DEVICE_SOURCE = device_info.cu
 
 # Default target
-all: $(TARGET)
+all: $(TARGET) $(DEVICE_INFO)
 
-# Build the CUDA application
-$(TARGET): $(SOURCE)
+# Build the CUDA Hello World application
+$(TARGET): $(SOURCE) | $(BUILD_DIR)
 	@echo "Compiling CUDA Hello World application..."
 	$(NVCC) $(NVCC_FLAGS) -o $(TARGET) $(SOURCE)
 	@echo "Build completed successfully!"
+
+# Build the device info utility
+$(DEVICE_INFO): $(DEVICE_SOURCE) | $(BUILD_DIR)
+	@echo "Compiling CUDA Device Info utility..."
+	$(NVCC) -o $(DEVICE_INFO) $(DEVICE_SOURCE)
+	@echo "Device info build completed successfully!"
+
+# Create build directory
+$(BUILD_DIR):
+	@mkdir -p $(BUILD_DIR)
 
 # Run the application
 run: $(TARGET)
 	@echo "Running CUDA Hello World application..."
 	./$(TARGET)
 
+# Run device info
+device-info: $(DEVICE_INFO)
+	@echo "CUDA Device Information:"
+	./$(DEVICE_INFO)
+
 # Clean build artifacts
 clean:
 	@echo "Cleaning build artifacts..."
-	rm -f $(TARGET)
+	rm -rf $(BUILD_DIR)
 	@echo "Clean completed!"
 
 # Check if CUDA is available
@@ -36,19 +54,14 @@ check-cuda:
 	@nvcc --version
 	@echo "CUDA installation found!"
 
-# Show device information
-device-info:
-	@echo "CUDA Device Information:"
-	@nvcc -o device_info device_info.cu 2>/dev/null && ./device_info 2>/dev/null || echo "Cannot run device info (CUDA may not be available)"
-
 # Help target
 help:
 	@echo "Available targets:"
-	@echo "  all          - Build the CUDA Hello World application"
-	@echo "  run          - Build and run the application"
+	@echo "  all          - Build the CUDA Hello World application and device info"
+	@echo "  run          - Build and run the Hello World application"
+	@echo "  device-info  - Build and run the device info utility"
 	@echo "  clean        - Remove build artifacts"
 	@echo "  check-cuda   - Check if CUDA is properly installed"
-	@echo "  device-info  - Show CUDA device information"
 	@echo "  help         - Show this help message"
 
 .PHONY: all run clean check-cuda device-info help 
